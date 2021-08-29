@@ -1,0 +1,60 @@
+{
+  "app": {
+    "bundleName": "me.xcyoung.markdown",
+    "vendor": "xcyoung",
+    "version": {
+      "code": 1000000,
+      "name": "1.0.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "package": "me.xcyoung.markdown",
+    "name": ".MyApplication",
+    "mainAbility": "me.xcyoung.markdown.HomeAbility",
+    "deviceType": [
+      "phone",
+      "tablet"
+    ],
+    "reqPermissions": [
+      {
+        "name": "ohos.permission.INTERNET"
+      }
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "entry",
+      "moduleType": "entry",
+      "installationFree": false
+    },
+    "abilities": [
+      {
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ],
+        "metaData": {
+          "customizeData": [
+            {
+              "name": "hwc-theme",
+              "value": "androidhwext:style/Theme.Emui.NoTitleBar"
+            }
+          ]
+        },
+        "orientation": "unspecified",
+        "name": "me.xcyoung.markdown.HomeAbility",
+        "icon": "$media:icon",
+        "description": "$string:mainability_description",
+        "label": "$string:entry_HomeAbility",
+        "type": "page",
+        "launchType": "standard"
+      }
+    ]
+  }
+}
