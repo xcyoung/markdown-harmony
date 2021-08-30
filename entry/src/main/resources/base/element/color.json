@@ -1,0 +1,16 @@
+{
+  "color": [
+    {
+      "name": "markdown_background",
+      "value": "#F1F2F5"
+    },
+    {
+      "name": "markdown_navigation_bar",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "markdown_navigation_title",
+      "value": "#000000"
+    }
+  ]
+}

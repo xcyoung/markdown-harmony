@@ -4,19 +4,28 @@ import me.xcyoung.markdown.ResourceTable;
 import me.xcyoung.markdown.parser.MarkdownParser;
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.content.Intent;
+import ohos.agp.components.Button;
 import ohos.agp.components.ComponentContainer;
 import ohos.agp.components.StackLayout;
+import ohos.agp.components.Text;
 import ohos.agp.components.webengine.WebView;
 import ohos.global.configuration.Configuration;
 import ohos.global.resource.RawFileEntry;
 import ohos.global.resource.Resource;
 
 public class HomeAbilitySlice extends AbilitySlice {
+    private Text title;
+    private Button backBtn;
+
     @Override
     protected void onStart(Intent intent) {
         super.onStart(intent);
         super.setUIContent(ResourceTable.Layout_ability_slice_home);
 
+        Text title = (Text) getAbility().findComponentById(ResourceTable.Id_title);
+        Button backBtn = (Button) getAbility().findComponentById(ResourceTable.Id_backBtn);
+
+        title.setText("线程池的实现原理.md");
         StackLayout stackLayout = (StackLayout) getAbility().findComponentById(ResourceTable.Id_markDownContainer);
         WebView webView = new WebView(getContext());
         webView.setWidth(ComponentContainer.LayoutConfig.MATCH_PARENT);
