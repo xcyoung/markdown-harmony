@@ -20,10 +20,9 @@ public class MarkdownAbilitySlice extends AbilitySlice {
     @Override
     protected void onStart(Intent intent) {
         super.onStart(intent);
-        super.setUIContent(ResourceTable.Layout_ability_slice_home);
+        super.setUIContent(ResourceTable.Layout_ability_slice_markdown);
 
         Text title = (Text) getAbility().findComponentById(ResourceTable.Id_title);
-        Button backBtn = (Button) getAbility().findComponentById(ResourceTable.Id_backBtn);
 
         title.setText("线程池的实现原理.md");
         StackLayout stackLayout = (StackLayout) getAbility().findComponentById(ResourceTable.Id_markDownContainer);

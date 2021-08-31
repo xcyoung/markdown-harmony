@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DirectionalLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:orientation="vertical"
+    ohos:background_element="$color:markdown_background">
+
+    <DependentLayout
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:start_padding="$ohos:float:id_default_padding_start"
+        ohos:end_padding="$ohos:float:id_default_padding_end"
+        ohos:top_padding="$ohos:float:id_default_padding_top"
+        ohos:bottom_padding="$ohos:float:id_default_padding_bottom_fixed"
+        ohos:alignment="start">
+
+        <Text
+            ohos:id="$+id:title"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:text="$string:entry_HomeAbility"
+            ohos:text_size="24fp"
+            ohos:text_color="$color:markdown_navigation_title"
+            ohos:align_parent_start="true"
+            ohos:start_margin="$ohos:float:id_elements_margin_horizontal_m"
+            />
+
+    </DependentLayout>
+
+    <StackLayout
+        ohos:id="$+id:markDownContainer"
+        ohos:height="match_parent"
+        ohos:width="match_parent"
+        ohos:start_margin="$ohos:float:id_default_padding_start"
+        ohos:end_margin="$ohos:float:id_default_padding_end"
+        />
+
+</DirectionalLayout>

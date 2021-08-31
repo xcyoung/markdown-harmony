@@ -1,17 +1,16 @@
 package me.xcyoung.markdown;
 
 import me.xcyoung.markdown.slice.HomeAbilitySlice;
-import ohos.aafwk.ability.Ability;
+import ohos.aafwk.ability.fraction.FractionAbility;
 import ohos.aafwk.content.Intent;
 import ohos.agp.components.Component;
-import ohos.agp.window.service.Window;
 import ohos.agp.window.service.WindowManager;
 import ohos.global.resource.NotExistException;
 import ohos.global.resource.WrongTypeException;
 
 import java.io.IOException;
 
-public class HomeAbility extends Ability {
+public class HomeAbility extends FractionAbility {
     @Override
     public void onStart(Intent intent) {
         super.onStart(intent);
