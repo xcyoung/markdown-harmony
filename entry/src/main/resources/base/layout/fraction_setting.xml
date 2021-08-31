@@ -5,11 +5,10 @@
     ohos:width="match_parent"
     ohos:orientation="vertical">
 
-    <Button
-        ohos:id="$+id:btn"
-        ohos:height="100vp"
-        ohos:width="100vp"
-        ohos:margin="100vp"
-        ohos:background_element="#00FF00"/>
+    <ListContainer
+        ohos:id="$+id:settingListContainer"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:layout_alignment="horizontal_center"/>
 
 </DirectionalLayout>

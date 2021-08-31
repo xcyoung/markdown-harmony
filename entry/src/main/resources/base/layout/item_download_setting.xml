@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DependentLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:padding="$ohos:float:id_default_padding_top"
+    ohos:background_element="$color:markdown_background">
+
+    <TextField
+        ohos:id="$+id:addressTextField"
+        ohos:height="50vp"
+        ohos:width="match_parent"
+        ohos:text_alignment="vertical_center"
+        ohos:line_height_num="1"
+        ohos:align_parent_start="true"
+        ohos:vertical_center="true"
+        ohos:text_size="16fp"
+        ohos:start_margin="$ohos:float:id_elements_margin_horizontal_l"
+        />
+
+    <Button
+        ohos:id="$+id:downloadBtn"
+        ohos:height="match_content"
+        ohos:width="100vp"
+        ohos:text="Download"
+        ohos:text_color="$color:markdown_navigation_title"
+        ohos:padding="8vp"
+        ohos:align_parent_end="true"
+        ohos:vertical_center="true"
+        ohos:background_element="$ohos:color:id_color_activated_start"/>
+
+</DependentLayout>
