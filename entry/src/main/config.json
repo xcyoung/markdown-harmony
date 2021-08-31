@@ -7,7 +7,11 @@
       "name": "1.0.0"
     }
   },
-  "deviceConfig": {},
+  "deviceConfig": {
+    "default": {
+      "network": {"cleartextTraffic": true}
+    }
+  },
   "module": {
     "package": "me.xcyoung.markdown",
     "name": ".MyApplication",
@@ -19,6 +23,11 @@
     "reqPermissions": [
       {
         "name": "ohos.permission.INTERNET"
+      }, {
+        "name": "ohos.permission.READ_MEDIA"
+      },
+      {
+        "name": "ohos.permission.WRITE_MEDIA"
       }
     ],
     "distro": {

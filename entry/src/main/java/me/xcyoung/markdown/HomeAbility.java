@@ -23,5 +23,9 @@ public class HomeAbility extends FractionAbility {
         }
 
         super.setMainRoute(HomeAbilitySlice.class.getName());
+
+        requestPermissionsFromUser(new String[]{
+                "ohos.permission.INTERNET", "ohos.permission.READ_MEDIA", "ohos.permission.WRITE_MEDIA"
+        }, 100);
     }
 }

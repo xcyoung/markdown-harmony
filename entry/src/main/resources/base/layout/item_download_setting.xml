@@ -15,6 +15,7 @@
         ohos:align_parent_start="true"
         ohos:vertical_center="true"
         ohos:text_size="16fp"
+        ohos:long_click_enabled="true"
         ohos:start_margin="$ohos:float:id_elements_margin_horizontal_l"
         />
 

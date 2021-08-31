@@ -1,12 +1,10 @@
 package me.xcyoung.markdown.fraction;
 
 import me.xcyoung.markdown.ResourceTable;
+import me.xcyoung.markdown.bean.setting.DownloadSettingVo;
 import me.xcyoung.markdown.bean.setting.SettingVo;
 import ohos.aafwk.ability.AbilitySlice;
-import ohos.agp.components.BaseItemProvider;
-import ohos.agp.components.Component;
-import ohos.agp.components.ComponentContainer;
-import ohos.agp.components.LayoutScatter;
+import ohos.agp.components.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 public class SettingListProvider extends BaseItemProvider {
     private final List<SettingVo> data = new ArrayList<>();
     private final AbilitySlice slice;
+    private OnEventListener onEventListener;
 
     public SettingListProvider(AbilitySlice slice) {
         super();
@@ -38,21 +37,35 @@ public class SettingListProvider extends BaseItemProvider {
     @Override
     public Component getComponent(int i, Component component, ComponentContainer componentContainer) {
         final Component cpt;
+        SettingVo vo = data.get(i);
         if (component == null) {
-            cpt = LayoutScatter.getInstance(slice).parse(ResourceTable.Layout_item_download_setting, null, false);
+            if (vo instanceof DownloadSettingVo) {
+                cpt = LayoutScatter.getInstance(slice).parse(ResourceTable.Layout_item_download_setting, null,
+                        false);
+                Button downloadBtn = (Button) cpt.findComponentById(ResourceTable.Id_downloadBtn);
+                TextField textField = (TextField) cpt.findComponentById(ResourceTable.Id_addressTextField);
+                downloadBtn.setClickedListener(c -> {
+                    if (onEventListener != null) onEventListener.onDownloadClick(textField.getText());
+                });
+            } else {
+                cpt = null;
+            }
         } else {
             cpt = component;
         }
-        SettingVo vo = data.get(i);
-//        Text title = (Text) cpt.findComponentById(ResourceTable.Id_titleText);
-//        title.setText(vo.getTitle());
-//        if (vo instanceof Dow)
-//        text.setText(sampleItem.getName());
         return cpt;
     }
 
     public void setData(List<SettingVo> data) {
         this.data.clear();
         this.data.addAll(data);
+    }
+
+    public void setOnEventListener(OnEventListener listener) {
+        this.onEventListener = listener;
+    }
+
+    interface OnEventListener {
+        void onDownloadClick(String address);
     }
 }
