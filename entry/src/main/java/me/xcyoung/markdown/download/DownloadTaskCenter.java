@@ -1,9 +1,13 @@
 package me.xcyoung.markdown.download;
 
+import ohos.eventhandler.EventHandler;
+import ohos.eventhandler.EventRunner;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
@@ -14,7 +18,8 @@ import java.util.concurrent.Executors;
 public class DownloadTaskCenter {
     static DownloadTaskCenter singleton;
     private final ExecutorService pool;
-    private Map<String, DownloadTaskField> queueMap = new ConcurrentHashMap<>();
+    private final EventHandler mainEventHandler = new EventHandler(EventRunner.getMainEventRunner());
+    private final Map<String, DownloadTaskField> queueMap = new ConcurrentHashMap<>();
 
     private DownloadTaskCenter() {
         pool = Executors.newFixedThreadPool(3);
@@ -60,10 +65,18 @@ public class DownloadTaskCenter {
                 file.createNewFile();
             }
             download(taskField.getDownloadUrl(), taskField.getSaveFilePath());
-            taskField.getListener().onDownloadSuccess(taskField.getSaveFilePath());
+            mainEventHandler.postSyncTask(() -> {
+                OnDownloadEventListener listener = taskField.getListener();
+                if (listener != null) listener.onDownloadSuccess(
+                        taskField.getDownloadUrl(),
+                        taskField.getSaveFilePath());
+            });
         } catch (Exception e) {
             e.printStackTrace();
-            taskField.getListener().onDownloadFailed(e.getMessage());
+            mainEventHandler.postSyncTask(() -> {
+                OnDownloadEventListener listener = taskField.getListener();
+                if (listener != null) listener.onDownloadFailed(e.getMessage());
+            });
         }
         queueMap.remove(taskField.getDownloadUrl());
     }
@@ -100,12 +113,12 @@ public class DownloadTaskCenter {
     static class DownloadTaskField {
         private final String downloadUrl;
         private final String saveFilePath;
-        private final OnDownloadEventListener listener;
+        private final WeakReference<OnDownloadEventListener> listener;
 
         public DownloadTaskField(String downloadUrl, String saveFilePath, OnDownloadEventListener listener) {
             this.downloadUrl = downloadUrl;
             this.saveFilePath = saveFilePath;
-            this.listener = listener;
+            this.listener = new WeakReference<>(listener);
         }
 
         public String getDownloadUrl() {
@@ -117,12 +130,12 @@ public class DownloadTaskCenter {
         }
 
         public OnDownloadEventListener getListener() {
-            return listener;
+            return listener.get();
         }
     }
 
     public interface OnDownloadEventListener {
-        void onDownloadSuccess(String saveFilePath);
+        void onDownloadSuccess(String downloadUrl, String saveFilePath);
 
         void onDownloadFailed(String message);
     }

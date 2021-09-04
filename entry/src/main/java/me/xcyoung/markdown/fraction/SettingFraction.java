@@ -49,21 +49,17 @@ public class SettingFraction extends Fraction {
                 .createDownloadTask(address, new File(getApplicationContext().getExternalCacheDir(), fileName + ".zip")
                         .getAbsolutePath(), new DownloadTaskCenter.OnDownloadEventListener() {
                     @Override
-                    public void onDownloadSuccess(String saveFilePath) {
-                        getMainTaskDispatcher().asyncDispatch(() -> {
-                            ToastDialog toastDialog = new ToastDialog(SettingFraction.this);
-                            toastDialog.setText("下载成功：" + saveFilePath);
-                            toastDialog.show();
-                        });
+                    public void onDownloadSuccess(String downloadUrl, String saveFilePath) {
+                        ToastDialog toastDialog = new ToastDialog(SettingFraction.this);
+                        toastDialog.setText("下载成功：" + saveFilePath);
+                        toastDialog.show();
                     }
 
                     @Override
                     public void onDownloadFailed(String message) {
-                        getMainTaskDispatcher().asyncDispatch(() -> {
-                            ToastDialog toastDialog = new ToastDialog(SettingFraction.this);
-                            toastDialog.setText("下载失败：" + message);
-                            toastDialog.show();
-                        });
+                        ToastDialog toastDialog = new ToastDialog(SettingFraction.this);
+                        toastDialog.setText("下载失败：" + message);
+                        toastDialog.show();
                     }
                 });
 
