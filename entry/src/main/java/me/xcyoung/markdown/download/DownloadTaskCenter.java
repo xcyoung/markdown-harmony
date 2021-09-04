@@ -1,10 +1,11 @@
 package me.xcyoung.markdown.download;
 
+import me.xcyoung.markdown.utils.FileUtils;
 import ohos.eventhandler.EventHandler;
 import ohos.eventhandler.EventRunner;
 
-import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
@@ -53,16 +54,14 @@ public class DownloadTaskCenter {
     private void downloadTask(String downloadUrl) {
         DownloadTaskField taskField = queueMap.get(downloadUrl);
         if (taskField == null) {
+            remove(downloadUrl);
             return;
         }
 
         try {
-            File file = new File(taskField.getSaveFilePath());
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            } else if (!file.exists()) {
-                file.createNewFile();
+            boolean createOrExistFile = FileUtils.createOrExistsFile(taskField.getSaveFilePath());
+            if (!createOrExistFile) {
+                throw new IOException("createOrExistsFile error");
             }
             download(taskField.getDownloadUrl(), taskField.getSaveFilePath());
             mainEventHandler.postSyncTask(() -> {
@@ -77,8 +76,13 @@ public class DownloadTaskCenter {
                 OnDownloadEventListener listener = taskField.getListener();
                 if (listener != null) listener.onDownloadFailed(e.getMessage());
             });
+        } finally {
+            remove(taskField.getDownloadUrl());
         }
-        queueMap.remove(taskField.getDownloadUrl());
+    }
+
+    private void remove(String downloadUrl) {
+        queueMap.remove(downloadUrl);
     }
 
     /**
