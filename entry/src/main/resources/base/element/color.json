@@ -11,6 +11,30 @@
     {
       "name": "markdown_navigation_title",
       "value": "#000000"
+    },
+    {
+      "name": "id_color_background",
+      "value": "$ohos:color:id_color_background"
+    },
+    {
+      "name": "id_color_card_bg",
+      "value": "$ohos:color:id_color_card_bg"
+    },
+    {
+      "name": "id_color_floating_button_bg_normal",
+      "value": "$ohos:color:id_color_floating_button_bg_normal"
+    },
+    {
+      "name": "id_color_floating_button_bg_pressed",
+      "value": "$ohos:color:id_color_floating_button_bg_pressed"
+    },
+    {
+      "name": "id_color_dialog_bg",
+      "value": "$ohos:color:id_color_dialog_bg"
+    },
+    {
+      "name": "id_color_text_primary",
+      "value": "$ohos:color:id_color_text_primary"
     }
   ]
 }

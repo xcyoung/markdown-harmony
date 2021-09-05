@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DependentLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:background_element="$color:id_color_dialog_bg"
+    ohos:bottom_padding="$ohos:float:id_default_padding_bottom_fixed"
+    ohos:end_padding="$ohos:float:id_default_padding_end"
+    ohos:orientation="vertical"
+    ohos:start_padding="$ohos:float:id_default_padding_start"
+    ohos:top_padding="$ohos:float:id_default_padding_top">
+
+    <Text
+        ohos:id="$+id:title"
+        ohos:height="64vp"
+        ohos:width="match_parent"
+        ohos:text="Remote URL"
+        ohos:text_alignment="center"
+        ohos:text_color="$ohos:color:id_color_text_primary"
+        ohos:text_size="$ohos:float:id_text_size_headline6"
+        />
+
+    <TextField
+        ohos:height="32vp"
+        ohos:width="match_parent"
+        ohos:above="$id:confirmBtn"
+        ohos:background_element="$ohos:color:id_color_text_field_sub_bg"
+        ohos:below="$id:title"
+        ohos:padding="$ohos:float:id_default_padding_start"
+        ohos:text_size="$ohos:float:id_text_size_body1"
+        ohos:text_color="$ohos:color:id_color_text_primary"
+        ohos:text_cursor_visible="false"
+        />
+
+    <Button
+        ohos:id="$+id:confirmBtn"
+        ohos:height="50vp"
+        ohos:width="80vp"
+        ohos:align_parent_bottom="true"
+        ohos:background_element="$ohos:graphic:button_bg_light"
+        ohos:horizontal_center="true"
+        ohos:padding="8vp"
+        ohos:padding_for_text="true"
+        ohos:text="Confirm"
+        ohos:text_color="$ohos:color:id_color_text_primary"
+        ohos:text_size="$ohos:float:id_text_size_button1"
+        ohos:top_margin="$float:default_bmb_buttonTopMargin"
+        />
+</DependentLayout>

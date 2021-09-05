@@ -2,19 +2,16 @@
 <DependentLayout
     xmlns:ohos="http://schemas.huawei.com/res/ohos"
     ohos:height="match_parent"
-    ohos:width="match_parent">
+    ohos:width="match_parent"
+    ohos:background_element="$ohos:color:id_color_background">
 
-    <Button
-        ohos:id="$+id:addBtn"
-        ohos:height="56vp"
-        ohos:width="56vp"
+    <com.nightonke.boommenu.BoomMenuButton
+        ohos:id="$+id:boom"
+        ohos:width="match_content"
+        ohos:height="match_content"
         ohos:align_parent_bottom="true"
-        ohos:background_element="$graphic:selector_add_markdown_btn"
-        ohos:bottom_margin="$ohos:float:id_dialog_margin_bottom"
         ohos:horizontal_center="true"
-        ohos:text="+"
-        ohos:text_color="#FFFFFF"
-        ohos:text_size="27fp"
+        ohos:bottom_margin="$ohos:float:id_elements_margin_vertical_l"
         />
 
 </DependentLayout>

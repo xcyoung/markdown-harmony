@@ -22,7 +22,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.100'
     implementation 'com.vladsch.flexmark:flexmark-all:0.62.2'
-    implementation 'io.openharmony.tpc.thirdlib:BottomNavigation:1.0.3'
+    implementation 'io.github.dzsf:boommenu:1.0.0'
 }
 decc {
     supportType = ['html','xml']

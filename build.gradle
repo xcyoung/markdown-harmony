@@ -28,6 +28,7 @@ buildscript {
         maven {
             url 'https://developer.huawei.com/repo/'
         }
+        mavenCentral()
         jcenter()
     }
     dependencies {
