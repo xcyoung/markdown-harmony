@@ -6,17 +6,19 @@ import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import me.xcyoung.markdown.ResourceTable;
+import me.xcyoung.markdown.download.DownloadTaskCenter;
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.content.Intent;
-import ohos.agp.components.AttrHelper;
-import ohos.agp.components.Component;
-import ohos.agp.components.LayoutScatter;
+import ohos.agp.components.*;
 import ohos.agp.utils.Color;
 import ohos.agp.window.dialog.CommonDialog;
+import ohos.agp.window.dialog.ToastDialog;
 import ohos.global.resource.NotExistException;
 import ohos.global.resource.WrongTypeException;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 public class HomeAbilitySlice extends AbilitySlice {
 
@@ -72,6 +74,37 @@ public class HomeAbilitySlice extends AbilitySlice {
         dialog.setContentCustomComponent(container);
         dialog.setSize(AttrHelper.vp2px((float) (getResourceManager().getDeviceCapability().width * 0.75),
                 getContext()), AttrHelper.vp2px((float) (getResourceManager().getDeviceCapability().height * 0.50), getContext()));
+
+        Button confirmBtn = (Button) container.findComponentById(ResourceTable.Id_confirmBtn);
+        TextField textField = (TextField) container.findComponentById(ResourceTable.Id_textField);
+        confirmBtn.setClickedListener(component -> {
+            String url = textField.getText();
+            remoteDownload(url);
+            dialog.destroy();
+        });
         dialog.show();
+    }
+
+    private void remoteDownload(String downloadUrl) {
+        String saveName = UUID.randomUUID().toString();
+
+        DownloadTaskCenter.getInstance().createDownloadTask(downloadUrl,
+                new File(getApplicationContext().getExternalCacheDir(), saveName + ".zip").getAbsolutePath(),
+                new DownloadTaskCenter.OnDownloadEventListener() {
+                    @Override
+                    public void onDownloadSuccess(String downloadUrl, String saveFilePath) {
+                        ToastDialog dialog = new ToastDialog(getContext());
+                        dialog.setText("onDownloadSuccess");
+                        dialog.show();
+                    }
+
+                    @Override
+                    public void onDownloadFailed(String message) {
+                        ToastDialog dialog = new ToastDialog(getContext());
+                        dialog.setText("onDownloadFailed");
+                        dialog.show();
+                    }
+                }
+        );
     }
 }

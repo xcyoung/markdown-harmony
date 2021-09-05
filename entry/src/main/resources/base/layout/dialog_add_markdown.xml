@@ -21,6 +21,7 @@
         />
 
     <TextField
+        ohos:id="$+id:textField"
         ohos:height="32vp"
         ohos:width="match_parent"
         ohos:above="$id:confirmBtn"
