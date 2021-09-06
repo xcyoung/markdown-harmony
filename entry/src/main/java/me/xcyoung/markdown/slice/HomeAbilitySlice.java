@@ -9,6 +9,7 @@ import me.xcyoung.markdown.ResourceTable;
 import me.xcyoung.markdown.download.DownloadTaskCenter;
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.content.Intent;
+import ohos.aafwk.content.Operation;
 import ohos.agp.components.*;
 import ohos.agp.utils.Color;
 import ohos.agp.window.dialog.CommonDialog;
@@ -64,7 +65,12 @@ public class HomeAbilitySlice extends AbilitySlice {
     }
 
     private void onBoomMenuLocalClick() {
-
+        Intent intent = new Intent();
+        Operation operation = new Intent.OperationBuilder().withAction("android.intent.action.GET_CONTENT").build();
+        intent.setOperation(operation);
+        intent.addFlags(Intent.FLAG_NOT_OHOS_COMPONENT);
+        intent.setType("file/*");
+        startAbilityForResult(intent, 100);
     }
 
     private void onBoomMenuRemoteClick() {
@@ -106,5 +112,13 @@ public class HomeAbilitySlice extends AbilitySlice {
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onAbilityResult(int requestCode, int resultCode, Intent resultData) {
+        super.onAbilityResult(requestCode, resultCode, resultData);
+        if (requestCode == 100) {
+
+        }
     }
 }
