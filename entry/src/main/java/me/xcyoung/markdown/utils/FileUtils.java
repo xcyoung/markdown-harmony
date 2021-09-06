@@ -9,6 +9,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * <pre>
@@ -1251,6 +1253,56 @@ public final class FileUtils {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean unZip(String zipFile, String targetDir, boolean isReWrite) {
+        ZipInputStream zis = null;
+        try {
+            FileInputStream fis = new FileInputStream(zipFile);
+            zis = new ZipInputStream(new BufferedInputStream(fis));
+            File file = new File(targetDir);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            ZipEntry zipEntry = zis.getNextEntry();
+            byte[] buffer = new byte[1024 * 1024];
+            int count = 0;
+            //如果进入点为空说明已经遍历完所有压缩包中文件和目录
+            while (zipEntry != null) {
+                if (zipEntry.isDirectory()) {
+                    file = new File(targetDir, zipEntry.getName());
+                    //文件需要覆盖或者是文件不存在
+                    if (isReWrite || !file.exists()) {
+                        file.mkdirs();
+                    }
+                } else {
+                    file = new File(targetDir, zipEntry.getName());
+                    //文件需要覆盖或者文件不存在，则解压文件
+                    if (isReWrite || !file.exists()) {
+                        file.createNewFile();
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        while ((count = zis.read(buffer)) > 0) {
+                            fileOutputStream.write(buffer, 0, count);
+                        }
+                        fileOutputStream.close();
+                    }
+                }
+                //定位到下一个文件入口
+                zipEntry = zis.getNextEntry();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (zis != null) {
+                try {
+                    zis.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }

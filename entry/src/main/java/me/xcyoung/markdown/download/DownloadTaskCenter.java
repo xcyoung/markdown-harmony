@@ -4,10 +4,7 @@ import me.xcyoung.markdown.utils.FileUtils;
 import ohos.eventhandler.EventHandler;
 import ohos.eventhandler.EventRunner;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
@@ -37,12 +34,12 @@ public class DownloadTaskCenter {
         return singleton;
     }
 
-    public boolean createDownloadTask(String downloadUrl, String saveFilePath, OnDownloadEventListener listener) {
+    public boolean createDownloadTask(String downloadUrl, String saveDirPath, OnDownloadEventListener listener) {
         if (queueMap.containsKey(downloadUrl)) {
             return false;
         }
 
-        DownloadTaskField taskField = new DownloadTaskField(downloadUrl, saveFilePath, listener);
+        DownloadTaskField taskField = new DownloadTaskField(downloadUrl, saveDirPath, listener);
         queueMap.put(downloadUrl, taskField);
         pool.submit(() -> {
             downloadTask(taskField.getDownloadUrl());
@@ -59,16 +56,13 @@ public class DownloadTaskCenter {
         }
 
         try {
-            boolean createOrExistFile = FileUtils.createOrExistsFile(taskField.getSaveFilePath());
-            if (!createOrExistFile) {
-                throw new IOException("createOrExistsFile error");
-            }
-            download(taskField.getDownloadUrl(), taskField.getSaveFilePath());
+            download(taskField);
             mainEventHandler.postSyncTask(() -> {
                 OnDownloadEventListener listener = taskField.getListener();
                 if (listener != null) listener.onDownloadSuccess(
                         taskField.getDownloadUrl(),
-                        taskField.getSaveFilePath());
+                        taskField.getSaveFilePath(),
+                        taskField.getSaveFileName());
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,18 +79,19 @@ public class DownloadTaskCenter {
         queueMap.remove(downloadUrl);
     }
 
-    /**
-     * 下载文件到本地
-     *
-     * @param urlString    被下载的文件地址
-     * @param saveFilePath 本地文件名
-     * @throws Exception 各种异常
-     */
-    private void download(String urlString, String saveFilePath) throws Exception {
+    private void download(DownloadTaskField taskField) throws Exception {
         // 构造URL
-        URL url = new URL(urlString);
+        URL url = new URL(taskField.getDownloadUrl());
         // 打开连接
         URLConnection con = url.openConnection();
+        String disposition = con.getHeaderField("Content-Disposition");
+        String dispositionFileName = disposition.replaceFirst("(?i)^.*filename=\"?([^\"]+)\"?.*$", "$1");
+        File saveFile = new File(taskField.getSaveDirPath(), dispositionFileName);
+        boolean createOrExistFile = FileUtils.createOrExistsFile(saveFile.getAbsolutePath());
+        if (!createOrExistFile) {
+            throw new IOException("createOrExistsFile error");
+        }
+        taskField.setSaveFileName(dispositionFileName);
         // 输入流
         InputStream is = con.getInputStream();
         // 1K的数据缓冲
@@ -104,7 +99,7 @@ public class DownloadTaskCenter {
         // 读取到的数据长度
         int len;
         // 输出的文件流
-        OutputStream os = new FileOutputStream(saveFilePath);
+        OutputStream os = new FileOutputStream(saveFile);
         // 开始读取
         while ((len = is.read(bs)) != -1) {
             os.write(bs, 0, len);
@@ -116,12 +111,13 @@ public class DownloadTaskCenter {
 
     static class DownloadTaskField {
         private final String downloadUrl;
-        private final String saveFilePath;
+        private final String saveDirPath;
+        private String saveFileName;
         private final WeakReference<OnDownloadEventListener> listener;
 
-        public DownloadTaskField(String downloadUrl, String saveFilePath, OnDownloadEventListener listener) {
+        public DownloadTaskField(String downloadUrl, String saveDirPath, OnDownloadEventListener listener) {
             this.downloadUrl = downloadUrl;
-            this.saveFilePath = saveFilePath;
+            this.saveDirPath = saveDirPath;
             this.listener = new WeakReference<>(listener);
         }
 
@@ -129,8 +125,20 @@ public class DownloadTaskCenter {
             return downloadUrl;
         }
 
+        public String getSaveDirPath() {
+            return saveDirPath;
+        }
+
+        public String getSaveFileName() {
+            return saveFileName;
+        }
+
+        public void setSaveFileName(String saveFileName) {
+            this.saveFileName = saveFileName;
+        }
+
         public String getSaveFilePath() {
-            return saveFilePath;
+            return new File(saveDirPath, saveFileName).getAbsolutePath();
         }
 
         public OnDownloadEventListener getListener() {
@@ -139,7 +147,7 @@ public class DownloadTaskCenter {
     }
 
     public interface OnDownloadEventListener {
-        void onDownloadSuccess(String downloadUrl, String saveFilePath);
+        void onDownloadSuccess(String downloadUrl, String saveFilePath, String saveFileName);
 
         void onDownloadFailed(String message);
     }
